@@ -1,49 +1,69 @@
-"""
- * Copyright (c) 2023, salesforce.com, inc.
- * All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause
- * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- * By Junnan Li
- * Based on huggingface code base
- * https://github.com/huggingface/transformers/blob/v4.15.0/src/transformers/models/bert
-"""
-
 import math
 import os
 import warnings
 from dataclasses import dataclass
-from typing import Optional, Tuple, Dict, Any
+from typing import Optional, Tuple, Dict, Any, List
 
 import torch
 from torch import Tensor, device, dtype, nn
 import torch.utils.checkpoint
-from torch import nn
 from torch.nn import CrossEntropyLoss
 import torch.nn.functional as F
 
 from transformers.activations import ACT2FN
-from transformers.file_utils import (
-    ModelOutput,
-)
+from transformers.utils import logging
+from transformers.models.bert.configuration_bert import BertConfig
+from transformers.modeling_utils import PreTrainedModel
 from transformers.modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     BaseModelOutputWithPoolingAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
     MaskedLMOutput,
     MultipleChoiceModelOutput,
-    NextSentencePredictorOutput,
     QuestionAnsweringModelOutput,
     SequenceClassifierOutput,
     TokenClassifierOutput,
 )
-from transformers.modeling_utils import (
-    PreTrainedModel,
-    apply_chunking_to_forward,
-    find_pruneable_heads_and_indices,
-    prune_linear_layer,
-)
-from transformers.utils import logging
-from transformers.models.bert.configuration_bert import BertConfig
+
+try:
+    from transformers.modeling_outputs import NextSentencePredictionOutput
+except ImportError:
+    from transformers.modeling_outputs import NextSentencePredictorOutput as NextSentencePredictionOutput
+
+# --- MANUAL POLYFILLS FOR REMOVED TRANSFORMERS FUNCTIONS ---
+def find_pruneable_heads_and_indices(heads, n_heads, head_size, already_pruned_heads):
+    heads = set(heads) - already_pruned_heads
+    mask = torch.ones(n_heads, head_size)
+    for head in heads:
+        head = head - sum(1 for h in already_pruned_heads if h < head)
+        mask[head] = 0
+    mask = mask.view(-1).contiguous()
+    index = torch.arange(len(mask))[mask.to(torch.bool)]
+    return heads, index
+
+def prune_linear_layer(layer, index, dim=0):
+    index = index.to(layer.weight.device)
+    W = layer.weight.index_select(dim, index).clone().detach()
+    if layer.bias is not None:
+        if dim == 1: b = layer.bias.clone().detach()
+        else: b = layer.bias.index_select(0, index).clone().detach()
+    new_size = list(layer.weight.size())
+    new_size[dim] = len(index)
+    new_layer = torch.nn.Linear(new_size[1], new_size[0], bias=layer.bias is not None).to(layer.weight.device)
+    new_layer.weight.requires_grad = False
+    new_layer.weight.copy_(W.contiguous())
+    new_layer.weight.requires_grad = True
+    if layer.bias is not None:
+        new_layer.bias.requires_grad = False
+        new_layer.bias.copy_(b.contiguous())
+        new_layer.bias.requires_grad = True
+    return new_layer
+
+def apply_chunking_to_forward(forward_fn, chunk_size, chunk_dim, *input_tensors):
+    if chunk_size <= 0: return forward_fn(*input_tensors)
+    input_chunks = [t.chunk(t.shape[chunk_dim] // chunk_size + 1, dim=chunk_dim) for t in input_tensors]
+    output_chunks = [forward_fn(*chunks) for chunks in zip(*input_chunks)]
+    return torch.cat(output_chunks, dim=chunk_dim)
 
 logger = logging.get_logger(__name__)
 
