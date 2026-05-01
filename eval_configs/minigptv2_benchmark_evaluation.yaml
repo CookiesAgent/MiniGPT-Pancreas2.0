@@ -1,0 +1,59 @@
+model:
+  arch: minigpt_v2
+  model_type: pretrain
+  max_txt_len: 500
+  end_sym: "</s>"
+  low_resource: False
+  prompt_template: '[INST] {} [/INST]'
+  llama_model: r"C:/Users/bauka/MiniGPT-Pancreas/lama-2-7b-chat-hf" # Path to Llama model
+  ckpt: "C:/Users/bauka/Downloads/checkpoint_stage3.pth"
+  ckpt_dir: "C:/Users/bauka/Downloads/"
+  lora_r: 64
+  lora_alpha: 16
+
+
+datasets:
+  cc_sbu_align:
+    vis_processor:
+      train:
+        name: "blip2_image_eval"
+        image_size: 448
+    text_processor:
+      train:
+        name: "blip_caption"
+
+evaluation_datasets:
+  MSD_pancreas_detection:
+    eval_file_path: ../datasets/MSD/annotations
+    img_path: ../datasets/MSD/slices
+    max_new_tokens: 20
+    batch_size: 24
+  NIH_pancreas_detection:
+    eval_file_path: ../datasets/NIH/annotations 
+    img_path: ../datasets/NIH/slices
+    max_new_tokens: 20
+    batch_size: 24
+  MSD_tumor_detection:
+    eval_file_path: ../datasets/MSD/annotations
+    img_path: ../datasets/MSD/slices
+    max_new_tokens: 20
+    batch_size: 16
+  TC:
+    eval_file_path: ../datasets/TC/annotations
+    img_path: ../datasets/TC/slices
+    max_new_tokens: 20
+    batch_size: 40
+  ABD:
+    eval_file_path: ../datasets/ABD/annotations
+    img_path: ../datasets/ABD/slices
+    max_new_tokens: 20
+    batch_size: 40
+run:
+  task: image_text_pretrain
+  name: minigptv2_evaluation
+  save_path: ../results/ # Adjust as needed
+
+  
+
+  
+

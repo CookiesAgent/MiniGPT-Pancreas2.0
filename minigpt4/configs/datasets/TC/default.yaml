@@ -1,0 +1,12 @@
+datasets:
+  TC:
+    data_type: images
+
+    build_info:
+      # Be careful not to append minus sign (-) before split to avoid itemizing
+      annotations:
+        train:
+          url:  /mnt/c/users/bauka/minigpt-pancreas/datasets/TC/annotations/TC_train.json
+          storage:  /mnt/c/users/bauka/minigpt-pancreas/datasets/TC/annotations/TC_train.json
+      images:
+          storage:  /mnt/c/users/bauka/minigpt-pancreas/datasets/TC/slices
