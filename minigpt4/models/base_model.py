@@ -13,11 +13,11 @@ from omegaconf import OmegaConf
 import numpy as np
 import torch
 import torch.nn as nn
-from transformers import LlamaTokenizer
+from transformers import LlamaTokenizer, BitsAndBytesConfig
 from peft import (
     LoraConfig,
     get_peft_model,
-    prepare_model_for_int8_training,
+    prepare_model_for_kbit_training,
 )
 
 from minigpt4.common.dist_utils import download_cached_file
@@ -178,6 +178,7 @@ class BaseModel(nn.Module):
             llama_model = LlamaForCausalLM.from_pretrained(
                 llama_model_path,
                 torch_dtype=torch.float16,
+                quantization_config=BitsAndBytesConfig(load_in_8bit=True),
                 device_map={'': low_res_device}
             )
         else:
@@ -187,7 +188,7 @@ class BaseModel(nn.Module):
             )
 
         if lora_r > 0:
-            llama_model = prepare_model_for_int8_training(llama_model)
+            llama_model = prepare_model_for_kbit_training(llama_model)
             loraconfig = LoraConfig(
                 r=lora_r,
                 bias="none",
@@ -240,6 +241,7 @@ class LayerNorm(nn.LayerNorm):
         orig_type = x.dtype
         ret = super().forward(x.type(torch.float32))
         return ret.type(orig_type)
+
 
 
 
