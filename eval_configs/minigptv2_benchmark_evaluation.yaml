@@ -6,8 +6,8 @@ model:
   low_resource: True
   prompt_template: '[INST] {} [/INST]'
   llama_model: "/content/Llama-2-7b-chat-hf/"
-  ckpt: "/content/MiniGPT-Pancreas/output/minigptv2_finetune/20260419225/checkpoint_4.pth"
-  ckpt_dir: "/content/MiniGPT-Pancreas/output/minigptv2_finetune/20260419225/"
+  ckpt: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260419225/checkpoint_4.pth"
+  ckpt_dir: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260419225/"
   lora_r: 64
   lora_alpha: 16
 
@@ -15,8 +15,8 @@ datasets:
   TC:
     build_info:
       # Keep this as the full path to the training file for the builder
-      ann_storage: "/content/MiniGPT-Pancreas/datasets/TC/annotations/TC_train.json"
-      vis_storage: "/content/MiniGPT-Pancreas/datasets/TC/slices"
+      ann_storage: "/content/MiniGPT-Pancreas2.0/datasets/TC/annotations/TC_train.json"
+      vis_storage: "/content/MiniGPT-Pancreas2.0/datasets/TC/slices"
     text_processor:
       train:
         name: "blip_caption"
@@ -33,8 +33,8 @@ datasets:
 evaluation_datasets:
   TC:
     # IMPORTANT: Set this to the FOLDER path only
-    eval_file_path: "/content/MiniGPT-Pancreas/datasets/TC/annotations"
-    img_path: "/content/MiniGPT-Pancreas/datasets/TC/slices"
+    eval_file_path: "/content/MiniGPT-Pancreas2.0/datasets/TC/annotations"
+    img_path: "/content/MiniGPT-Pancreas2.0/datasets/TC/slices"
     max_new_tokens: 20
     batch_size: 10
 
