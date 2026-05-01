@@ -44,16 +44,16 @@ datasets:
   #      name: "blip_caption"
   #  sample_ratio: 100
 
-  NIH_pancreas_detection:
-    batch_size: 8
-    vis_processor:
-      train:
-        name: "blip2_image_train"
-        image_size: 448
-    text_processor:
-      train:
-        name: "blip_caption"
-    sample_ratio: 100
+  #NIH_pancreas_detection:
+  #  batch_size: 8
+  #  vis_processor:
+  #    train:
+  #      name: "blip2_image_train"
+  #      image_size: 448
+  #  text_processor:
+  #    train:
+  #      name: "blip_caption"
+  #  sample_ratio: 100
   TC:
     batch_size: 8
     vis_processor:
