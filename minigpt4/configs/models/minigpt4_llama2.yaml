@@ -12,7 +12,7 @@ model:
   # generation configs
   prompt: ""
 
-  llama_model: "C:/Users/bauka/MiniGPT-Pancreas/Llama-2-7b-chat-hf"
+  llama_model: "/content/Llama-2-7b-chat-hf"
 
 preprocess:
     vis_processor:
