@@ -94,7 +94,7 @@ class ReferTCIAPancreasDataset(Dataset):
         image = self.vis_processor(image)
         image_new_size = [image.shape[1], image.shape[2]]
 
-        image_new_size = [100,100]
+        image_new_size = [1000,1000]
 
         sample_sentence = ref['sentences'][0]['sent']
 
