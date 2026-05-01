@@ -4,12 +4,9 @@ model:
   model_type: pretrain
   max_txt_len: 512
   image_size: 448
-  load_in_4bit: True
   end_sym: "</s>"
-  llama_model: "/mnt/c/Users/bauka/MiniGPT-Pancreas/llama-2-7b-chat-hf" #c://Users//bauka//MiniGPT-Pancreas//llama-2-7b-chat-hf
-  #/mnt/c/Users/bauka/MiniGPT-Pancreas/llama-2-7b-chat-hf
-  ckpt: "/mnt/c/Users/bauka/Downloads/checkpoint_stage3.pth" #/pancreas_detection/20250806153/checkpoint_11.pth"
-  # /mnt/c:/Users/bauka/Downloads/checkpoint_stage3.pth 
+  llama_model: "/content/Llama-2-7b-chat-hf"
+  ckpt: "/content/checkpoint_stage3.pth"
   use_grad_checkpoint: True
   chat_template: True
   lora_r: 64
@@ -26,8 +23,8 @@ datasets:
   #    train:
   #      name: "blip_caption"
   #  sample_ratio: 100
-  MSD_tumor_detection: #MSD_pancreas_detection:
-    batch_size: 2
+  MSD_tumor_detection:
+    batch_size: 8
     vis_processor:
       train:
         name: "blip2_image_train"
@@ -36,7 +33,7 @@ datasets:
       train:
         name: "blip_caption"
     sample_ratio: 100
-  #MSD_pancreas_detection: #MSD_pancreas_detection_balanced:
+  #MSD_pancreas_detection:
   #  batch_size: 16
   #  vis_processor:
   #    train:
@@ -47,18 +44,18 @@ datasets:
   #      name: "blip_caption"
   #  sample_ratio: 100
 
-  #NIH_pancreas_detection: #NIH_pancreas_detection_balanced:
-  #  batch_size: 16
-  #  vis_processor:
-  #    train:
-  #      name: "blip2_image_train"
-  #      image_size: 448
-  #  text_processor:
-  #    train:
-  #      name: "blip_caption"
-  #  sample_ratio: 100
+  NIH_pancreas_detection:
+    batch_size: 8
+    vis_processor:
+      train:
+        name: "blip2_image_train"
+        image_size: 448
+    text_processor:
+      train:
+        name: "blip_caption"
+    sample_ratio: 100
   TC:
-    batch_size: 2
+    batch_size: 8
     vis_processor:
       train:
         name: "blip2_image_train"
@@ -75,20 +72,20 @@ run:
   init_lr: 1e-5
   min_lr: 1e-6
   warmup_lr: 1e-6
-  
+
   weight_decay: 0.05
   max_epoch: 50
   num_workers: 6
   warmup_steps: 1000
-  iters_per_epoch: 1000
+  iters_per_epoch: 500
 
-  seed: 42
-  output_dir: "../checkpoints/ABD" #relative to ./minigpt4
+  seed: 202057383
+  output_dir: "/content/drive/MyDrive/CSCI_597/checkpoints"
 
   amp: True
   resume_ckpt_path: null
 
-  evaluate: False 
+  evaluate: False
   train_splits: ["train"]
 
   device: "cuda"
@@ -97,4 +94,4 @@ run:
   distributed: True
 
   wandb_log: False
-  job_name: ABD
+  job_name: "Pancreas_Finetune"
