@@ -24,7 +24,7 @@ datasets:
   #      name: "blip_caption"
   #  sample_ratio: 100
   MSD_tumor_detection:
-    batch_size: 8
+    batch_size: 4
     vis_processor:
       train:
         name: "blip2_image_train"
@@ -55,7 +55,7 @@ datasets:
   #      name: "blip_caption"
   #  sample_ratio: 100
   TC:
-    batch_size: 8
+    batch_size: 4
     vis_processor:
       train:
         name: "blip2_image_train"
@@ -74,7 +74,7 @@ run:
   warmup_lr: 1e-6
 
   weight_decay: 0.05
-  max_epoch: 50
+  max_epoch: 15
   num_workers: 6
   warmup_steps: 1000
   iters_per_epoch: 500
