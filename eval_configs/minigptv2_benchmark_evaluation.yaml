@@ -37,6 +37,11 @@ evaluation_datasets:
     img_path: "/content/MiniGPT-Pancreas2.0/datasets/TC/slices"
     max_new_tokens: 20
     batch_size: 10
+  MSD_tumor_detection:
+    eval_file_path: /content/MiniGPT-Pancreas2.0/datasets/MSD/annotations
+    img_path: /content/MiniGPT-Pancreas2.0/datasets/MSD/slices
+    max_new_tokens: 20
+    batch_size: 16
 
 run:
   task: vqa
