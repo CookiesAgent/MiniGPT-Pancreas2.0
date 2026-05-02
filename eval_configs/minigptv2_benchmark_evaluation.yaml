@@ -6,8 +6,8 @@ model:
   low_resource: True
   prompt_template: '[INST] {} [/INST]'
   llama_model: "/content/Llama-2-7b-chat-hf/"
-  ckpt: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260419225/checkpoint_4.pth"
-  ckpt_dir: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260419225/"
+  ckpt: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260501222/checkpoint_14.pth"
+  ckpt_dir: "/content/MiniGPT-Pancreas2.0/output/minigptv2_finetune/20260501222/"
   lora_r: 64
   lora_alpha: 16
 
