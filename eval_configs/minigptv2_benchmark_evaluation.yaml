@@ -41,5 +41,5 @@ evaluation_datasets:
 run:
   task: vqa
   name: minigptv2_evaluation
-  save_path: "/content/MiniGPT-Pancreas/eval_results"
+  save_path: "/content/MiniGPT-Pancreas2.0/eval_results"
   device: "cuda"
