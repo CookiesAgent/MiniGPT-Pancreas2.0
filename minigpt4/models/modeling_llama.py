@@ -56,7 +56,7 @@ class LlamaForCausalLM(LlamaForCausalLMOrig):
         if labels is not None:
             shift_logits = logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
-            w_neg = 2.0   # penalize false positives more
+            w_neg = 1.5   # penalize false positives more
             w_pos = 1.0
             loss_fct = CrossEntropyLoss(
                 weight=torch.tensor([w_neg, w_pos]).to(shift_logits.device),
