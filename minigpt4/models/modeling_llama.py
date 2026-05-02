@@ -56,7 +56,12 @@ class LlamaForCausalLM(LlamaForCausalLMOrig):
         if labels is not None:
             shift_logits = logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
-            loss_fct = CrossEntropyLoss(reduction=reduction)
+            w_neg = 2.0   # penalize false positives more
+            w_pos = 1.0
+            loss_fct = CrossEntropyLoss(
+                weight=torch.tensor([w_neg, w_pos]).to(shift_logits.device),
+                reduction=reduction
+            )
             shift_logits = shift_logits.view(-1, self.config.vocab_size)
             shift_labels = shift_labels.view(-1)
             shift_labels = shift_labels.to(shift_logits.device)
