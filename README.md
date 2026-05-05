@@ -13,8 +13,8 @@ https://colab.research.google.com/drive/1qic6FWeWWL-uzjxuBcmKc2FFx8SHoCAN?usp=sh
 Git clone our repository, creating a python environment and activate it via the following command
 
 ```bash
-git clone https://github.com/elianastasio/MiniGPT-Pancreas.git
-cd MiniGPT-Pancreas
+git clone https://github.com/CookiesAgent/MiniGPT-Pancreas2.0.git
+cd MiniGPT-Pancreas2.0
 conda env create -f environment.yml
 conda activate minigptp
 ```
