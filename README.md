@@ -2,6 +2,9 @@
 
 <font size='5'>**MiniGPT-Pancreas: Multimodal Large Language Model for Pancreas Cancer Classification and Detection**</font>
 
+You can run the code in following Jupyter Notebook:
+https://colab.research.google.com/drive/1qic6FWeWWL-uzjxuBcmKc2FFx8SHoCAN?usp=sharing
+
 ## Getting Started
 ### Installation
 
